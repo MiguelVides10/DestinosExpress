@@ -16,12 +16,13 @@ namespace DestinosExpress
         private string pasaporte;
         private string dui;
 
+        public int Id_cliente { get => id_cliente; set => id_cliente = value; }
         public string Nombre { get => nombre; set => nombre = value; }
         public string Apellido { get => apellido; set => apellido = value; }
         public int Edad { get => edad; set => edad = value; }
         public string Pasaporte { get => pasaporte; set => pasaporte = value; }
         public string Dui { get => dui; set => dui = value; }
-        public int Id_cliente { get => id_cliente; set => id_cliente = value; }
+        
 
 
         public Cliente(string _nombre, string _apellido, int _edad, string _pasaporte, string _dui)

@@ -23,7 +23,7 @@ namespace DestinosExpress
             {
                 Conexion con = new Conexion(textBox1.Text, textBox2.Text);
                 con.obtenerConexion.Close();
-                FrmPrincipal frm = new FrmPrincipal(con);
+                FrmAgregar frm = new FrmAgregar(con);
                 frm.Show();
             }catch (Exception ex)
             {

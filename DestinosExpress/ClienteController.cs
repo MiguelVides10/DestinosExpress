@@ -11,6 +11,7 @@ namespace DestinosExpress
 {
     public class ClienteController
     {
+
         public List<Cliente> verTodo(Conexion con)
         {
             List<Cliente> lClientes = new List<Cliente>();
@@ -41,15 +42,16 @@ namespace DestinosExpress
             return lClientes;
         }
 
-        public void editarCliente(string nombre, string apellido, int edad, string pasaporte, string dui, Conexion con)
+        public void editarCliente(int id,string nombre, string apellido, int edad, string pasaporte, string dui, Conexion con)
         {
-            string query = "UPDATE clientes set nombre =@nombre, apellido=@apellido, edad=@edad, pasaporte=@pasaporte, dui=@dui";
-            using (con.obtenerConexion)
+            string query = "UPDATE clientes set nombre =@nombre, apellido=@apellido, edad=@edad, pasaporte=@pasaporte, dui=@dui WHERE id_cliente=@id";
+            using (SqlConnection conectar = new SqlConnection(con.CadenaDeConexion))
             {
-                con.obtenerConexion.Open();
-                using(SqlCommand sqlc = new SqlCommand(query))
+                conectar.Open();
+                using(SqlCommand sqlc = new SqlCommand(query, conectar))
                 {
                     Cliente clnte = new Cliente(nombre, apellido, edad, pasaporte, dui);
+                    sqlc.Parameters.AddWithValue("@id", id);
                     sqlc.Parameters.AddWithValue("@nombre", clnte.Nombre);
                     sqlc.Parameters.AddWithValue("@apellido", clnte.Apellido);
                     sqlc.Parameters.AddWithValue("@edad", clnte.Edad);
@@ -59,6 +61,7 @@ namespace DestinosExpress
                     try
                     {
                         sqlc.ExecuteNonQuery();
+
                     }catch(Exception ex)
                     {
                         throw new Exception("Hay un error\n"+ex.Message);
@@ -84,7 +87,6 @@ namespace DestinosExpress
                 {
                     conectar.Open();
                     sqlc.ExecuteNonQuery();
-                    conectar.Close();
                 }
                 catch (Exception ex)
                 {
@@ -96,11 +98,11 @@ namespace DestinosExpress
         public Cliente mostrarCliente (int id, Conexion con)
         {
             string query = "SELECT * FROM clientes WHERE id_cliente=@id;";
-            using (con.obtenerConexion)
+            using (SqlConnection conectar = new SqlConnection(con.CadenaDeConexion))
             {
-                using (SqlCommand sqlc = new SqlCommand(query, con.obtenerConexion))
+                using (SqlCommand sqlc = new SqlCommand(query, conectar))
                 {
-                    con.obtenerConexion.Open();
+                    conectar.Open();
                     sqlc.Parameters.AddWithValue("@id", id);
                     try
                     {
@@ -122,7 +124,7 @@ namespace DestinosExpress
                         throw new Exception(ex.Message);
                     }
                 }
-                
+
             }
         }
 
@@ -132,10 +134,10 @@ namespace DestinosExpress
             List<Cliente> lClientes = new List<Cliente>();
             string query = "select * from clientes";
 
-            using (con.obtenerConexion)
+            using (SqlConnection conectar = new SqlConnection(con.CadenaDeConexion))
             {
-                con.obtenerConexion.Open();
-                using (SqlCommand scm = new SqlCommand(query, con.obtenerConexion))
+                conectar.Open();
+                using (SqlCommand scm = new SqlCommand(query, conectar))
                 {
                     try
                     {
